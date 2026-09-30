@@ -1,0 +1,191 @@
+{% extends "admin/admin_base.html" %} {% block page_title %} Manage Trek Staff
+{% endblock %} {% block page_description %} Approve, blacklist and manage trek
+staff members. {% endblock %} {% block admin_content %}
+
+<div class="search-card">
+  <form method="GET">
+    <div class="row g-3">
+      <div class="col-md-10">
+        <input
+          type="text"
+          class="form-control"
+          name="search"
+          placeholder="Search by staff name or email..."
+          value="{{ request.args.get('search','') }}"
+        />
+      </div>
+
+      <div class="col-md-2 d-grid">
+        <button type="submit" class="btn btn-admin">
+          <i class="bi bi-search"></i>
+
+          Search
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="dashboard-card">
+  <div class="card-header-custom">
+    <h4>Trek Staff Members</h4>
+  </div>
+
+  <div class="table-responsive-custom">
+    <table class="admin-table table-hover align-middle">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for staff in staff %}
+
+        <tr>
+          <td>{{ staff.user_id }}</td>
+
+          <td>{{ staff.name }}</td>
+
+          <td>{{ staff.email }}</td>
+
+          <td>{{ staff.phone }}</td>
+
+          <td>
+            {% if staff.is_blacklisted %}
+
+            <span class="badge bg-danger"> BLACKLISTED </span>
+
+            {% elif staff.is_approved %}
+
+            <span class="badge bg-success"> APPROVED </span>
+
+            {% else %}
+
+            <span class="badge bg-warning text-dark"> PENDING </span>
+
+            {% endif %}
+          </td>
+
+          <td>
+            {% if not staff.is_approved %}
+
+            <a
+              href="{{ url_for('main.approve_staff', staff_id=staff.user_id) }}"
+              class="btn btn-success btn-action"
+            >
+              Approve
+            </a>
+
+            <form
+              id="rejectStaff{{ staff.user_id }}"
+              method="POST"
+              action="{{ url_for(
+        'main.reject_staff',
+        staff_id=staff.user_id
+    ) }}"
+              style="display: inline"
+            >
+              <button
+                type="button"
+                class="btn btn-danger btn-action"
+                onclick="confirmForm(
+
+            'rejectStaff{{ staff.user_id }}',
+
+            'Reject this staff registration?'
+
+        )"
+              >
+                Reject
+              </button>
+            </form>
+
+            {% elif staff.is_blacklisted %}
+
+            <a
+              href="{{ url_for('main.unblacklist_staff', staff_id=staff.user_id) }}"
+              class="btn btn-warning btn-action"
+            >
+              Unblacklist
+            </a>
+
+            {% else %}
+
+            <form
+              id="blacklistStaff{{ staff.user_id }}"
+              method="POST"
+              action="{{ url_for(
+        'main.blacklist_staff',
+        staff_id=staff.user_id) }}"
+              style="display: inline"
+            >
+              <button
+                type="button"
+                class="btn btn-dark btn-action"
+                onclick="confirmForm(
+
+            'blacklistStaff{{ staff.user_id }}',
+
+            'Blacklist this staff member?'
+
+        )"
+              >
+                Blacklist
+              </button>
+            </form>
+
+            <form
+              id="removeStaff{{ staff.user_id }}"
+              method="POST"
+              action="{{ url_for(
+        'main.remove_staff',
+        staff_id=staff.user_id
+    ) }}"
+              style="display: inline"
+            >
+              <button
+                type="button"
+                class="btn btn-danger btn-action"
+                onclick="confirmForm(
+
+            'removeStaff{{ staff.user_id }}',
+
+            'Remove this staff from PeakTrail?'
+
+        )"
+              >
+                Remove
+              </button>
+            </form>
+
+            {% endif %}
+          </td>
+        </tr>
+
+        {% else %}
+
+        <tr>
+          <td colspan="7">
+            <div class="empty-state">
+              <i class="bi bi-person-workspace"></i>
+
+              <h5>No Staff Found</h5>
+
+              <p>No trek staff available.</p>
+            </div>
+          </td>
+        </tr>
+
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}

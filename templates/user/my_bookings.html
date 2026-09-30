@@ -1,0 +1,99 @@
+{% extends "user/user_base.html" %} {% block page_title %} My Bookings {%
+endblock %} {% block page_description %} Track all your booked treks. {%
+endblock %} {% block user_content %}
+
+<div class="user-card">
+  <div class="alert alert-info mb-4" style="background-color: #eeeeb6; color: black;">
+    If you have already paid, the trek staff will verify your payment and
+    automatically approve your booking.
+  </div>
+
+  <div class="table-responsive-custom">
+    <table class="user-table align-middle">
+      <thead>
+        <tr>
+          <th>Trek</th>
+
+          <th>Location</th>
+
+          <th>Booking Date</th>
+
+          <th>Payment</th>
+
+          <th>Status</th>
+
+          <th>Participation</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for booking in bookings %}
+
+        <tr>
+          <td>{{ booking.trek.trek_name }}</td>
+
+          <td>{{ booking.trek.location }}</td>
+
+          <td>{{ booking.booking_date }}</td>
+
+          <td>
+            {% if booking.payment_status == "Completed" %}
+
+            <span class="badge bg-success"> Paid </span>
+
+            {% else %}
+
+            <span class="badge bg-warning text-dark"> Pending </span>
+
+            {% endif %}
+          </td>
+
+          <td>{{ booking.trek.status }}</td>
+
+          <td>
+            <div class="d-flex justify-content-center gap-2">
+              {% if booking.participant_confirmed %}
+
+              <span class="badge bg-success"> Confirmed </span>
+
+              {% else %}
+
+              <span class="badge bg-secondary"> Waiting </span>
+
+              {% endif %} {% if booking.trek.status == "Bookings Open" %}
+
+              <form
+                id="cancelBooking{{ booking.booking_id }}"
+                method="POST"
+                action="{{ url_for(
+        'main.cancel_booking',
+        booking_id=booking.booking_id
+    ) }}"
+              >
+                <button
+                  type="button"
+                  class="btn btn-danger btn-sm"
+                  onclick="confirmForm(
+
+            'cancelBooking{{ booking.booking_id }}',
+
+            'Cancel this booking?'
+
+        )"
+                >
+                  Cancel
+                </button>
+              </form>
+
+              {% endif %}
+            </div>
+          </td>
+        </tr>
+
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}

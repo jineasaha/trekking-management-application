@@ -1,0 +1,274 @@
+{% extends "admin/admin_base.html" %} {% block page_title %} Edit Trek {%
+endblock %} {% block page_description %} Update trek information. {% endblock %}
+{% block admin_content %}
+
+<div class="dashboard-card">
+  <form method="POST">
+    <div class="row g-4">
+      <div class="col-md-6">
+        <label class="form-label">Trek Name</label>
+
+        <input
+          class="form-control"
+          name="trek_name"
+          value="{{ trek.trek_name }}"
+          required
+          {% if trek.status in ["Trek Ongoing", "Completed"] %}readonly{% endif %}
+        />
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Location</label>
+
+        <input
+          class="form-control"
+          name="location"
+          value="{{ trek.location }}"
+          required
+          {% if trek.status in ["Trek Ongoing", "Completed"] %}readonly{% endif %}
+        />
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">Difficulty</label>
+
+        <select class="form-select" name="difficulty" {% if trek.status in ["Trek Ongoing", "Completed"] %}disabled{% endif %}>
+          <option {% if trek.difficulty=="Easy" %}selected{% endif %}>
+            Easy
+          </option>
+
+          <option {% if trek.difficulty=="Moderate" %}selected{% endif %}>
+            Moderate
+          </option>
+
+          <option {% if trek.difficulty == " Difficult " %}selected{% endif %}>
+            Difficult
+          </option>
+        </select>
+      </div>
+
+      <div class="col-md-8">
+        <label class="form-label">Slots</label>
+
+        <input
+          type="number"
+          class="form-control"
+          name="available_slots"
+          value="{{ trek.available_slots }}"
+          required
+          {% if trek.status in ["Trek Ongoing", "Completed"] %}readonly{% endif %}
+        />
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Start Date</label>
+
+        <input
+          type="date"
+          id="start-date"
+          class="form-control"
+          name="start_date"
+          value="{{ trek.start_date.strftime('%Y-%m-%d') }}"
+          required
+          {% if trek.status in ["Trek Ongoing", "Completed"] %}readonly{% endif %}
+        />
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">End Date</label>
+
+        <input
+          type="date"
+          id="end-date"
+          class="form-control"
+          name="end_date"
+          value="{{ trek.end_date.strftime('%Y-%m-%d') }}"
+          required
+          {% if trek.status in ["Trek Ongoing", "Completed"] %}readonly{% endif %}
+        />
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Status</label>
+
+        <select class="form-select" name="status" {% if trek.status in ["Trek Ongoing", "Completed"] %}disabled{% endif %}>
+          <option {% if trek.status=="Bookings Open" %}selected{% endif %}>
+            Bookings Open
+          </option>
+
+          <option {% if trek.status=="Trek Ongoing" %}selected{% endif %}>
+            Trek Ongoing
+          </option>
+
+          <option {% if trek.status=="Completed" %}selected{% endif %}>
+            Completed
+          </option>
+        </select>
+      </div>
+
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Price (₹)</label>
+
+        <input
+          type="number"
+          step="0.01"
+          min="0"
+          name="price"
+          value="{{trek.price}}"
+          class="form-control"
+          required
+          {% if trek.status in ["Trek Ongoing", "Completed"] %}readonly{% endif %}
+        />
+      </div>
+
+      <div class="col-12 mb-3">
+        <label class="form-label">Description</label>
+
+        <textarea name="description" rows="4" class="form-control" required>
+{{trek.description}}</textarea
+        >
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label"> Assign Trek Staff </label>
+
+        <div class="staff-box" id="staff-box">
+          {% for staff in staff_members %}
+
+          <label class="staff-item">
+            <input
+              type="checkbox"
+              name="assigned_staff"
+              value="{{ staff.user_id }}"
+              {%
+              if
+              staff.user_id
+              in
+              selected_staff_ids
+              %}
+              checked
+              {%
+              endif
+              %}
+              {% if trek.status in ["Trek Ongoing", "Completed"] %}disabled{% endif %}
+            />
+
+            <span>{{ staff.name }}</span>
+          </label>
+
+          {% endfor %}
+        </div>
+
+        <small class="text-muted">
+          Select between 1 and 5 staff members.
+        </small>
+      </div>
+    </div>
+
+    <div class="mt-4">
+      <button class="btn btn-admin">Update Trek</button>
+
+      <a
+        href="{{ url_for('main.manage_treks') }}"
+        class="m-3 btn btn-outline-admin"
+      >
+        Cancel
+      </a>
+    </div>
+  </form>
+</div>
+
+<script>
+
+  document.addEventListener("change", function (e) {
+    if (e.target.name !== "assigned_staff") {
+      return;
+    }
+
+    const selected = document.querySelectorAll('input[name="assigned_staff"]:checked');
+
+    if (selected.length > 5) {
+
+      showAlert("Maximum 5 staff allowed.");
+      e.target.checked = false;
+    }
+    }
+  );
+
+  document.addEventListener("DOMContentLoaded", function () {
+    const startDateInput = document.getElementById("start-date");
+
+    const staffBox = document.getElementById("staff-box");
+
+    const trekId = "{{ trek.trek_id }}";
+
+    const trekStatus = "{{ trek.status }}";
+
+    if (
+      trekStatus === "Trek Ongoing" ||
+      trekStatus === "Completed"
+    ) {
+      return;
+    }
+
+    startDateInput.addEventListener("change", function () {
+      const startDate = this.value;
+
+      const endDate = document.getElementById("end-date").value;
+
+      if (!startDate || !endDate) {return;}
+
+      fetch(`/admin/treks/${trekId}/available-staff?start_date=${startDate}&end_date=${endDate}`).then((response) => response.json())
+        .then((data) => {
+          const selected = [];
+
+          document
+            .querySelectorAll('input[name="assigned_staff"]:checked')
+            .forEach((cb) => {
+              selected.push(cb.value);
+            });
+
+          staffBox.innerHTML = "";
+
+          if (data.length === 0) {
+            staffBox.innerHTML = `
+
+                    <p class="text-danger">
+
+                        No staff available.
+
+                    </p>
+
+                `;
+
+            return;
+          }
+
+          data.forEach((staff) => {
+            const checked = selected.includes(String(staff.id))
+              ? "checked"
+              : "";
+
+            staffBox.innerHTML += `
+
+                    <label class="staff-item">
+
+                        <input
+                            type="checkbox"
+                            name="assigned_staff"
+                            value="${staff.id}"
+                            ${checked}
+                        >
+
+                        <span>${staff.name}</span>
+
+                    </label>
+
+                `;
+          });
+        });
+    });
+  });
+</script>
+
+{% endblock %}

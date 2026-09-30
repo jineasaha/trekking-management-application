@@ -1,0 +1,164 @@
+{% extends "base.html" %} {% block content %}
+
+<div
+  class="row justify-content-center align-items-center"
+  style="min-height: 85vh"
+>
+  <div class="col-lg-10">
+    <div class="card auth-card">
+      <div class="row g-0">
+        <!-- LEFT PANEL -->
+
+        <div class="col-lg-5 left-panel">
+          <div class="brand">
+            <img
+              src="{{ url_for('static', filename='images/logo.png') }}"
+              alt="PeakTrail Logo"
+            />
+
+            <h1>PEAKTRAIL</h1>
+          </div>
+
+          {% if role == "User" %}
+
+          <h3 class="quote">
+            Your next adventure
+            <br />
+            starts here.
+          </h3>
+
+          {% else %}
+
+          <h3 class="quote">
+            Lead unforgettable
+            <br />
+            trekking experiences.
+          </h3>
+
+          {% endif %}
+
+          <div class="feature-list">
+            <div class="feature-item">
+              <i class="bi bi-check-circle-fill"></i>
+
+              <span>Simple Registration</span>
+            </div>
+
+            <div class="feature-item">
+              <i class="bi bi-check-circle-fill"></i>
+
+              <span>Secure User Accounts</span>
+            </div>
+
+            <div class="feature-item">
+              <i class="bi bi-check-circle-fill"></i>
+
+              <span>Role Based Access</span>
+            </div>
+
+            {% if role == "Staff" %}
+
+            <div class="feature-item">
+              <i class="bi bi-hourglass-split"></i>
+
+              <span>Admin Approval Required</span>
+            </div>
+
+            {% else %}
+
+            <div class="feature-item">
+              <i class="bi bi-backpack-fill"></i>
+
+              <span>Book Exciting Treks</span>
+            </div>
+
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- RIGHT PANEL -->
+
+        <div class="col-lg-7 right-panel">
+          <h2>Create Account</h2>
+
+          <p class="subtitle">
+            Register as
+
+            <span class="badge bg-success">
+              {% if role == "User" %} Trekker {% else %} Trek Staff {% endif %}
+            </span>
+          </p>
+
+          <form method="POST">
+            <div class="mb-3">
+              <label class="form-label">  Name </label>
+
+              <input
+                type="text"
+                name="name"
+                class="form-control"
+                minlength="3"
+                maxlength="100"
+                placeholder="Enter your name"
+                required
+              />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label"> Email Address </label>
+
+              <input
+                type="email"
+                name="email"
+                class="form-control"
+                placeholder="Enter your email"
+                required
+              />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label"> Password </label>
+
+              <input
+                type="password"
+                name="password"
+                minlength="6"
+                maxlength="30"
+                class="form-control"
+                placeholder="Create a password"
+                required
+              />
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label"> Phone Number </label>
+
+              <input
+                type="text"
+                name="phone"
+                pattern="[0-9]{10}"
+                maxlength="10"
+                class="form-control"
+                placeholder="Enter phone number"
+              />
+            </div>
+
+            <button type="submit" class="btn btn-login">
+              <i class="bi bi-person-plus-fill me-2"></i>
+
+              Create Account
+            </button>
+          </form>
+
+          <p class="small-text">
+            Already have an account?
+
+            <a href="{{ url_for('main.login') }}"> Login </a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

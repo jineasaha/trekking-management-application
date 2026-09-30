@@ -1,0 +1,232 @@
+{% extends "admin/admin_base.html" %} {% block page_title %} Manage Treks {%
+endblock %} {% block page_description %} Create, edit and manage all trekking
+events. {% endblock %} {% block page_action %}
+<a href="{{ url_for('main.add_trek') }}" class="btn btn-admin">
+  <i class="bi bi-plus-circle"></i>
+  Add Trek
+</a>
+{% endblock %} {% block admin_content %}
+
+<form
+  method="POST"
+  action="{{ url_for('main.update_payment_details') }}"
+  id="paymentDetailsForm"
+>
+  <div class="dashboard-card mb-4">
+    <div class="card-body p-3">
+      <div class="row align-items-center g-3">
+        <div class="col-lg-9">
+          <label class="fw-semibold mb-2">
+            Payment Details (UPI ID / Bank Account / QR Instructions)
+          </label>
+
+          <input
+            type="text"
+            id="paymentDetailsInput"
+            name="payment_details"
+            class="form-control"
+            value="{{ payment_details }}"
+            placeholder="Enter UPI ID or Banking Details"
+            {%
+            if
+            payment_details
+            %}
+            readonly
+            {%
+            endif
+            %}
+          />
+        </div>
+
+        <div class="col-lg-3 d-grid">
+          <button
+            type="button"
+            id="paymentDetailsButton"
+            class="btn btn-admin"
+            onclick="togglePaymentDetails()"
+          >
+            {% if payment_details %} Update Details {% else %} Add Details {%
+            endif %}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+<div class="search-card">
+  <form method="GET">
+    <div class="row g-3 align-items-center">
+      <div class="col-lg-6">
+        <input
+          type="text"
+          class="form-control"
+          name="search"
+          placeholder="Search trek by name..."
+          value="{{ request.args.get('search','') }}"
+        />
+      </div>
+
+      <div class="col-lg-3">
+        <select class="form-select" name="staff_id">
+          <option value="">All Staff</option>
+
+          {% for staff in staff_members %}
+          <option
+            value="{{ staff.user_id }}"
+            {%
+            if selected_staff == staff.user_id
+            %}selected{%
+            endif
+            %}
+          >
+            {{ staff.name }}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="col-lg-3 d-grid">
+        <button class="btn btn-admin">
+          <i class="bi bi-search"></i>
+          Search
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="dashboard-card">
+  <div class="card-header-custom">
+    <h4>All Treks</h4>
+  </div>
+
+  <div class="table-responsive-custom">
+    <table class="admin-table table-hover align-middle">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Location</th>
+          <th>Difficulty</th>
+          <th>Duration</th>
+          <th>Slots</th>
+          <th>Status</th>
+          <th>Assigned Staff</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for trek in treks %}
+
+        <tr>
+          <td>{{ trek.trek_name }}</td>
+
+          <td>{{ trek.location }}</td>
+
+          <td>{{ trek.difficulty }}</td>
+
+          <td>{{ trek.duration }} Days</td>
+
+          <td>{{ trek.available_slots }}</td>
+
+          <td>
+            {% if trek.status=="Trek Ongoing" %}
+
+            <span class="badge bg-success"> Trek Ongoing </span>
+
+            {% elif trek.status=="Completed" %}
+
+            <span class="badge bg-secondary"> Completed </span>
+
+            {% else %}
+
+            <span class="badge bg-warning text-dark"> Bookings Open </span>
+
+            {% endif %}
+          </td>
+
+          <td>
+            {% if trek.assigned_staff %} {% for staff in trek.assigned_staff %}
+            {{ staff.user.name }}{% if not loop.last %}, {% endif %} {% endfor
+            %} {% else %} - {% endif %}
+          </td>
+
+          <td>
+            <a
+              href="{{ url_for('main.edit_trek',trek_id=trek.trek_id) }}"
+              class="btn btn-edit"
+            >
+              <i class="bi bi-pencil"></i>
+            </a>
+
+            <form
+              id="deleteTrek{{ trek.trek_id }}"
+              method="POST"
+              action="{{ url_for('main.delete_trek', trek_id=trek.trek_id) }}"
+              style="display: inline"
+            >
+              <button
+                type="button"
+                class="btn btn-delete"
+                onclick="confirmForm(
+
+            'deleteTrek{{ trek.trek_id }}',
+
+            'Delete this trek?')"
+              >
+                <i class="bi bi-trash"></i>
+              </button>
+            </form>
+          </td>
+        </tr>
+
+        {% else %}
+
+        <tr>
+          <td colspan="8">
+            <div class="empty-state">
+              <i class="bi bi-signpost"></i>
+
+              <h5>No Treks Found</h5>
+
+              <p>Create your first trek.</p>
+            </div>
+          </td>
+        </tr>
+
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  function togglePaymentDetails() {
+    const input = document.getElementById("paymentDetailsInput");
+
+    const button = document.getElementById("paymentDetailsButton");
+
+    const form = document.getElementById("paymentDetailsForm");
+
+    if (button.innerText.trim() === "Save Details") {
+      form.submit();
+
+      return;
+    }
+
+    input.removeAttribute("readonly");
+
+    input.focus();
+
+    input.setSelectionRange(
+      input.value.length,
+
+      input.value.length,
+    );
+
+    button.innerHTML = "Save Details";
+  }
+</script>
+
+{% endblock %}

@@ -1,0 +1,200 @@
+{% extends "staff/staff_base.html" %} {% block page_title %} Ongoing Treks {%
+endblock %} {% block page_description %} Monitor and manage all currently
+ongoing treks assigned to you. {% endblock %} {% block page_action %}
+
+
+{% endblock %} {% block staff_content %} {% if ongoing_treks %} {% for trek in
+ongoing_treks %}
+
+<div class="staff-card">
+  <div class="d-flex justify-content-between align-items-start flex-wrap">
+    <div>
+      <h3 class="trek-title">
+        <i class="bi bi-signpost-split-fill me-2"></i>
+
+        {{ trek.trek_name }}
+      </h3>
+
+      <div class="trek-location">
+        <i class="bi bi-geo-alt-fill me-2"></i>
+
+        {{ trek.location }}
+      </div>
+    </div>
+
+    <span class="badge status-ongoing"> {{ trek.status }} </span>
+  </div>
+
+  <div class="trek-info mt-4">
+    <div class="info-box">
+      <small>Difficulty</small>
+
+      <strong>{{ trek.difficulty }}</strong>
+    </div>
+
+    <div class="info-box">
+      <small>Duration</small>
+
+      <strong>{{ trek.duration }} Days</strong>
+    </div>
+
+    <div class="info-box">
+      <small>Start Date</small>
+
+      <strong>{{ trek.start_date.strftime("%d %b %Y") }}</strong>
+    </div>
+
+    <div class="info-box">
+      <small>End Date</small>
+
+      <strong>{{ trek.end_date.strftime("%d %b %Y") }}</strong>
+    </div>
+
+    <div class="info-box">
+      <small>Price</small>
+
+      <strong>₹{{ trek.price }}</strong>
+    </div>
+
+    <div class="info-box">
+      <small>Slots</small>
+
+      <strong>{{ trek.available_slots }}</strong>
+    </div>
+  </div>
+
+  <div class="mt-4">
+    <h5>Description</h5>
+
+    <p class="text-muted">{{ trek.description }}</p>
+  </div>
+
+  <div class="row mt-4">
+    <div class="col-lg-6">
+      <h5 class="mb-3">
+        <i class="bi bi-person-workspace me-2"></i>
+
+        Assigned Staff
+      </h5>
+
+      {% for member in trek.assigned_staff %}
+
+      <span
+        class="staff-chip {% if member.staff_id==session['user_id'] %}you{% endif %}"
+      >
+        <i class="bi bi-person-fill"></i>
+
+        {{ member.user.name }} {% if member.staff_id==session['user_id'] %}
+        (You) {% endif %}
+      </span>
+
+      {% endfor %}
+    </div>
+
+    <div class="col-lg-6">
+      <h5 class="mb-3">
+        <i class="bi bi-people-fill me-2"></i>
+
+        Confirmed Participants
+      </h5>
+
+      {% set confirmed = namespace(count=0) %} {% for booking in trek.bookings
+      %} {% if booking.payment_status=="Completed" and
+      booking.participant_confirmed %} {% set confirmed.count = confirmed.count
+      + 1 %} {% endif %} {% endfor %}
+
+      <p class="text-muted mb-3">
+        {{ confirmed.count }} Confirmed Participant(s)
+      </p>
+
+      {% set preview = namespace(count=0) %} {% for booking in trek.bookings %}
+      {% if booking.payment_status=="Completed" and
+      booking.participant_confirmed and preview.count < 5 %} {% set
+      preview.count = preview.count + 1 %}
+
+      <span class="staff-chip">
+        <i class="bi bi-person-check-fill"></i>
+
+        {{ booking.user.name }}
+      </span>
+
+      {% endif %} {% endfor %} {% if confirmed.count > 5 %}
+
+      <span class="staff-chip"> +{{ confirmed.count-5 }} More... </span>
+
+      {% endif %}
+    </div>
+  </div>
+
+  <hr class="my-4" />
+
+  <div class="row text-center">
+    <div class="col-md-4">
+      <strong>{{ confirmed.count }}</strong>
+
+      <br />
+
+      <small class="text-muted"> Confirmed </small>
+    </div>
+
+    <div class="col-md-4">
+      <strong> {{ trek.available_slots }} </strong>
+
+      <br />
+
+      <small class="text-muted"> Slots Remaining </small>
+    </div>
+
+    <div class="col-md-4">
+      <strong> {{ trek.end_date.strftime("%d %b") }} </strong>
+
+      <br />
+
+      <small class="text-muted"> Trek Ends </small>
+    </div>
+  </div>
+
+  <div class="mt-4 d-flex flex-wrap gap-3">
+    <a
+      href="{{ url_for(
+'main.staff_ongoing_participants',
+trek_id=trek.trek_id
+) }}"
+      class="btn btn-staff2"
+    >
+      <i class="bi bi-people-fill me-2"></i>
+
+      View Participants
+    </a>
+
+    <form
+      method="POST"
+      action="{{ url_for('main.staff_complete_trek', trek_id=trek.trek_id) }}"
+      class="d-inline"
+    >
+      <button
+        type="submit"
+        class="btn btn-staff-success"
+        onclick="return confirm('Mark this trek as completed?');"
+      >
+        <i class="bi bi-check2-circle me-2"></i>
+
+        Mark as Completed
+      </button>
+    </form>
+  </div>
+</div>
+
+{% endfor %} {% else %}
+
+<div class="staff-card">
+  <div class="empty-state">
+    <i class="bi bi-map"></i>
+
+    <h4>No Ongoing Treks</h4>
+
+    <p>You don't have any ongoing treks assigned at the moment.</p>
+  </div>
+</div>
+
+{% endif %} {% endblock %}

@@ -1,0 +1,198 @@
+{% extends "admin/admin_base.html" %} {% block page_title %} Dashboard {%
+endblock %} {% block page_description %} Manage treks, staff, trekkers and
+bookings. {% endblock %} {% block admin_content %}
+
+<!-- Statistics -->
+
+<div class="stat-grid">
+  <div class="stat-card">
+    <div class="stat-icon trek">
+      <i class="bi bi-signpost-split-fill"></i>
+    </div>
+
+    <div class="stat-info">
+      <h3>{{ total_treks }}</h3>
+      <p>Total Treks</p>
+    </div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-icon user">
+      <i class="bi bi-people-fill"></i>
+    </div>
+
+    <div class="stat-info">
+      <h3>{{ total_users }}</h3>
+      <p>Trekkers</p>
+    </div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-icon staff">
+      <i class="bi bi-person-workspace"></i>
+    </div>
+
+    <div class="stat-info">
+      <h3>{{ total_staff }}</h3>
+      <p>Trek Staff</p>
+    </div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-icon booking">
+      <i class="bi bi-journal-check"></i>
+    </div>
+
+    <div class="stat-info">
+      <h3>{{ total_bookings }}</h3>
+      <p>Bookings</p>
+    </div>
+  </div>
+</div>
+
+<!-- Tables -->
+
+<div class="row">
+  <!-- Recent Treks -->
+
+  <div class="col-lg-6 mb-4">
+    <div class="dashboard-card">
+      <div class="card-header-custom">
+        <h5>Recent Treks</h5>
+
+        <a href="{{ url_for('main.manage_treks') }}"> View All </a>
+      </div>
+      <div class="table-responsive-custom">
+        <table class="admin-table table-hover align-middle">
+          <thead>
+            <tr>
+              <th>ID</th>
+
+              <th>Name</th>
+
+              <th>Difficulty</th>
+
+              <th>Slots</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {% for trek in recent_treks %}
+
+            <tr>
+              <td>#{{ trek.trek_id }}</td>
+
+              <td>{{ trek.trek_name }}</td>
+
+              <td>{{ trek.difficulty }}</td>
+
+              <td>{{ trek.available_slots }}</td>
+            </tr>
+
+            {% else %}
+
+            <tr>
+              <td colspan="4" class="text-center">No trek available.</td>
+            </tr>
+
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pending Staff -->
+
+  <div class="col-lg-6 mb-4">
+    <div class="dashboard-card">
+      <div class="card-header-custom">
+        <h5>Pending Staff Approval</h5>
+
+        <a href="{{ url_for('main.manage_staff') }}"> View All </a>
+      </div>
+
+      <div class="table-responsive-custom">
+        <table class="admin-table table-hover align-middle">
+          <thead>
+            <tr>
+              <th>Name</th>
+
+              <th>Email</th>
+
+              <th>Status</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {% for staff in pending_staff %}
+
+            <tr>
+              <td>{{ staff.name }}</td>
+
+              <td>{{ staff.email }}</td>
+
+              <td>
+                <span class="badge bg-warning text-dark"> Pending </span>
+              </td>
+            </tr>
+
+            {% else %}
+
+            <tr>
+              <td colspan="3" class="text-center">No pending approvals.</td>
+            </tr>
+
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Latest Bookings -->
+
+<div class="dashboard-card">
+  <div class="card-header-custom">
+    <h5>Latest Booking Records</h5>
+
+    <a href="{{ url_for('main.booking_records') }}"> View All </a>
+  </div>
+
+  <div class="table-responsive-custom">
+    <table class="admin-table table-hover align-middle">
+      <thead>
+        <tr>
+          <th>Booking ID</th>
+          <th>Trekker</th>
+          <th>Trek</th>
+          <th>Status</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for booking in latest_bookings %}
+
+        <tr>
+          <td>#{{ booking.booking_id }}</td>
+          <td>{{ booking.user.name }}</td>
+          <td>{{ booking.trek.trek_name }}</td>
+          <td>{{ booking.booking_status }}</td>
+          <td>{{ booking.booking_date }}</td>
+        </tr>
+
+        {% else %}
+
+        <tr>
+          <td colspan="5" class="text-center">No bookings available.</td>
+        </tr>
+
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}

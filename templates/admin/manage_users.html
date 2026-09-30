@@ -1,0 +1,150 @@
+{% extends "admin/admin_base.html" %} {% block page_title %} Manage Trekkers {%
+endblock %} {% block page_description %} View and manage all registered
+trekkers. {% endblock %} {% block page_action %} {% endblock %} {% block
+admin_content %}
+
+<div class="search-card">
+  <form method="GET">
+    <div class="row g-3">
+      <div class="col-md-10">
+        <input
+          type="text"
+          class="form-control"
+          name="search"
+          placeholder="Search by name or email..."
+          value="{{ request.args.get('search','') }}"
+        />
+      </div>
+
+      <div class="col-md-2 d-grid">
+        <button class="btn btn-admin">
+          <i class="bi bi-search"></i>
+
+          Search
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="dashboard-card">
+  <div class="card-header-custom">
+    <h4>
+      Registered Trekkers
+
+      <span class="badge bg-success ms-2"> {{ users|length }} </span>
+    </h4>
+  </div>
+
+  <div class="table-responsive-custom">
+    <table class="admin-table table-hover align-middle">
+      <thead>
+        <tr>
+          <th>Name</th>
+
+          <th>Email</th>
+
+          <th>Phone</th>
+
+          <th>Total Treks</th>
+
+          <th>Status</th>
+
+          <th>Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for user in users %}
+
+        <tr>
+          <td>
+            <strong>{{ user.name }}</strong>
+          </td>
+
+          <td>{{ user.email }}</td>
+
+          <td>{{ user.phone if user.phone else "-" }}</td>
+
+          <td>
+            {% set ns = namespace(count=0) %} {% for booking in user.bookings %}
+            {% if booking.payment_status == "Completed" and
+            booking.participant_confirmed %} {% set ns.count = ns.count + 1 %}
+            {% endif %} {% endfor %}
+
+            <span class="badge bg-primary"> {{ ns.count }} </span>
+          </td>
+
+          <td>
+            {% if user.is_blacklisted %}
+
+            <span class="badge bg-danger"> BLACKLISTED </span>
+
+            {% else %}
+
+            <span class="badge bg-success"> ACTIVE </span>
+
+            {% endif %}
+          </td>
+
+          <td>
+            {% if user.is_blacklisted %}
+
+            <a
+              href="{{ url_for('main.unblacklist_user', user_id=user.user_id) }}"
+              class="btn btn-warning btn-action"
+            >
+              Unblacklist
+            </a>
+
+            {% else %}
+
+            <form
+              id="blacklistUser{{ user.user_id }}"
+              method="POST"
+              action="{{ url_for(
+        'main.blacklist_user',
+        user_id=user.user_id
+    ) }}"
+              style="display: inline"
+            >
+              <button
+                type="button"
+                class="btn btn-danger btn-action"
+                onclick="confirmForm(
+
+            'blacklistUser{{ user.user_id }}',
+
+            'Blacklist this trekker?'
+
+        )"
+              >
+                Blacklist
+              </button>
+            </form>
+
+            {% endif %}
+          </td>
+        </tr>
+
+        {% else %}
+
+        <tr>
+          <td colspan="6">
+            <div class="empty-state">
+              <i class="bi bi-people"></i>
+
+              <h5>No Trekkers Found</h5>
+
+              <p>No users match your search.</p>
+            </div>
+          </td>
+        </tr>
+
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}

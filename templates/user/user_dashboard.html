@@ -1,0 +1,87 @@
+{% extends "user/user_base.html" %} {% block page_title %} Dashboard {% endblock
+%} {% block page_description %} Track your trekking activities. {% endblock %}
+{% block user_content %}
+
+<div class="user-stat-grid">
+  <div class="user-stat-card">
+    <div class="user-stat-icon booked">
+      <i class="bi bi-backpack"></i>
+    </div>
+
+    <div class="user-stat-info">
+      <h3>{{ booked_count }}</h3>
+
+      <p>Booked Treks</p>
+    </div>
+  </div>
+
+  <div class="user-stat-card">
+    <div class="user-stat-icon upcoming">
+      <i class="bi bi-calendar-event"></i>
+    </div>
+
+    <div class="user-stat-info">
+      <h3>{{ upcoming_count }}</h3>
+
+      <p>Upcoming</p>
+    </div>
+  </div>
+
+  <div class="user-stat-card">
+    <div class="user-stat-icon ongoing">
+      <i class="bi bi-compass"></i>
+    </div>
+
+    <div class="user-stat-info">
+      <h3>{{ ongoing_count }}</h3>
+
+      <p>Ongoing</p>
+    </div>
+  </div>
+
+  <div class="user-stat-card">
+    <div class="user-stat-icon completed">
+      <i class="bi bi-trophy"></i>
+    </div>
+
+    <div class="user-stat-info">
+      <h3>{{ completed_count }}</h3>
+
+      <p>Completed</p>
+    </div>
+  </div>
+</div>
+
+<div class="user-card mt-4">
+  <h4>Recent Bookings</h4>
+
+  <div class="table-responsive-custom">
+    <table class="user-table">
+      <thead>
+        <tr>
+          <th>Trek</th>
+
+          <th>Location</th>
+
+          <th>Status</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for booking in recent_bookings %}
+
+        <tr>
+          <td>{{ booking.trek.trek_name }}</td>
+
+          <td>{{ booking.trek.location }}</td>
+
+          <td>{{ booking.trek.status }}</td>
+        </tr>
+
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}

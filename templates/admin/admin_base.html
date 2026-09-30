@@ -1,0 +1,140 @@
+{% extends "base.html" %} {% block content %}
+
+<div class="admin-layout">
+  <button class="mobile-menu-btn" id="mobileMenuBtn">
+    <i class="bi bi-list"></i>
+  </button>
+  <aside class="sidebar" id="sidebar">
+    <button class="close-sidebar-btn" id="closeSidebarBtn">
+      <i class="bi bi-arrow-left"></i>
+    </button>
+    <div class="sidebar-top">
+      <div class="logo-circle">
+        <img
+          src="{{ url_for('static', filename='images/logo.png') }}"
+          alt="PeakTrail Logo"
+        />
+      </div>
+
+      <div>
+        <h3>PeakTrail</h3>
+      </div>
+    </div>
+
+    <div class="admin-profile">
+      <div class="profile-icon">
+        <i class="bi bi-shield-check"></i>
+      </div>
+
+      <div>
+        <strong>{{ session["name"] | upper}}</strong>
+        <small>Administrator</small>
+      </div>
+    </div>
+
+    <div class="sidebar-section">
+      <a
+        href="{{ url_for('main.admin_dashboard') }}"
+        class="sidebar-link {% if request.endpoint=='main.admin_dashboard' %}active{% endif %}"
+      >
+        <i class="bi bi-grid-fill"></i>
+
+        Dashboard
+      </a>
+
+      <a
+        href="{{ url_for('main.manage_treks') }}"
+        class="sidebar-link {% if request.endpoint in ['main.manage_treks','main.add_trek','main.edit_trek'] %}active{% endif %}"
+      >
+        <i class="bi bi-signpost-split-fill"></i>
+
+        Manage Treks
+      </a>
+
+      <a
+        href="{{ url_for('main.manage_staff') }}"
+        class="sidebar-link {% if request.endpoint=='main.manage_staff' %}active{% endif %}"
+      >
+        <i class="bi bi-person-workspace"></i>
+
+        Trek Staff
+      </a>
+
+      <a
+        href="{{ url_for('main.manage_users') }}"
+        class="sidebar-link {% if request.endpoint=='main.manage_users' %}active{% endif %}"
+      >
+        <i class="bi bi-people-fill"></i>
+
+        Trekkers
+      </a>
+
+      <a
+        href="{{ url_for('main.booking_records') }}"
+        class="sidebar-link {% if request.endpoint=='main.booking_records' %}active{% endif %}"
+      >
+        <i class="bi bi-journal-check"></i>
+
+        Bookings
+      </a>
+
+      <a
+        href="{{ url_for('main.trek_history') }}"
+        class="sidebar-link {% if request.endpoint=='main.trek_history' %}active{% endif %}"
+      >
+        <i class="bi bi-clock-history"></i>
+
+        Trek History
+      </a>
+    </div>
+
+    <div class="sidebar-bottom">
+      <a href="{{ url_for('main.logout') }}" class="logout-btn">
+        <i class="bi bi-box-arrow-right"></i>
+
+        Logout
+      </a>
+    </div>
+  </aside>
+
+  <section class="dashboard-area">
+    <div class="dashboard-topbar">
+      <div>
+        <h2>{% block page_title %} Dashboard {% endblock %}</h2>
+
+        <p>
+          {% block page_description %} Welcome to PeakTrail Administration. {%
+          endblock %}
+        </p>
+      </div>
+
+      <div>{% block page_action %} {% endblock %}</div>
+    </div>
+
+    {% block admin_content %} {% endblock %}
+  </section>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const menuBtn = document.getElementById("mobileMenuBtn");
+
+    const closeBtn = document.getElementById("closeSidebarBtn");
+
+    const sidebar = document.getElementById("sidebar");
+
+    menuBtn.addEventListener("click", function () {
+      sidebar.classList.add("show-sidebar");
+
+      menuBtn.style.display = "none";
+    });
+
+    closeBtn.addEventListener("click", function () {
+      sidebar.classList.remove("show-sidebar");
+
+      menuBtn.style.display = "flex";
+    });
+  });
+</script>
+
+{% endblock %}

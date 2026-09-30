@@ -1,0 +1,925 @@
+/* PEAKTRAIL - Trekking Management System Main Stylesheet */
+
+/* Google Font imported in base.html */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --primary: #566f40;
+  --primary-dark: #465a34;
+
+  --secondary: #a6b886;
+
+  --cream: #ddccaa;
+
+  --background: #f4eee3;
+
+  --card: #ffffff;
+
+  --text: #2f3528;
+
+  --muted: #7a7a6f;
+
+  --border: #d8dccf;
+
+  --shadow: 0 24px 60px rgba(48, 54, 40, 0.14);
+
+  --radius: 24px;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: "Poppins", sans-serif;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Background image */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+
+    background: url("../images/bg2.png") center center/cover no-repeat;
+
+    z-index: -2;
+}
+
+/* Blur + light overlay */
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+
+    backdrop-filter: blur(7px);
+    -webkit-backdrop-filter: blur(7px);
+
+    background: rgba(248, 250, 245, 0.121);
+
+    z-index: -1;
+}
+
+
+/* Authentication Card */
+
+.auth-card {
+  position: relative;
+
+  overflow: hidden;
+
+  border-radius: 34px;
+
+  background: rgba(255, 255, 255, 0.78);
+
+  backdrop-filter: blur(25px);
+
+  border: 1px solid rgba(255, 255, 255, 0.4);
+
+  box-shadow:
+    0 50px 90px rgba(15, 23, 42, 0.18),
+    0 12px 30px rgba(15, 23, 42, 0.08);
+
+    margin-top: 26px;
+}
+
+/* Left Hero Panel */
+
+.left-panel {
+  position: relative;
+
+  overflow: hidden;
+
+  padding: 70px 55px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: center;
+
+  color: white;
+
+  background:
+    radial-gradient(
+      circle at top left,
+      rgba(255, 255, 255, 0.18),
+      transparent 35%
+    ),
+    radial-gradient(
+      circle at bottom right,
+      rgba(255, 255, 255, 0.08),
+      transparent 30%
+    ),
+    linear-gradient(145deg, #163a2b 0%, #1f4d3a 30%, #275942 65%, #2f6750 100%);
+}
+
+/* subtle glow */
+
+.left-panel::before {
+  content: "";
+
+  position: absolute;
+
+  width: 240px;
+
+  height: 240px;
+
+  border-radius: 50%;
+
+  background: radial-gradient(rgba(255, 255, 255, 0.28), transparent 70%);
+
+  top: -60px;
+
+  right: -50px;
+
+  filter: blur(10px);
+}
+
+/* mountain silhouette */
+
+.left-panel::after {
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+
+  bottom: 0;
+
+  width: 100%;
+
+  height: 100%;
+
+  background: url("../images/mountain.jpg") bottom center/ cover no-repeat;
+
+  opacity: 0.3;
+}
+
+/* Logo */
+
+.brand {
+  display: flex;
+
+  align-items: center;
+
+  margin-bottom: 15px;
+}
+
+.brand img {
+  width: 70px;
+  height: 55px;
+  z-index: 3;
+  border-radius: 22px;
+  margin-right: 12px;
+}
+
+.brand h1 {
+  font-size: 2.5rem;
+
+  font-weight: 700;
+
+  letter-spacing: 2px;
+}
+
+.tagline {
+  margin-top: 18px;
+
+  font-size: 1rem;
+
+  color: rgb(255, 255, 255);
+
+  letter-spacing: 2px;
+
+  text-transform: uppercase;
+}
+
+.quote {
+  font-size: 2rem;
+  font-weight: 600;
+  line-height: 1.35;
+  margin-top: 25px;
+  letter-spacing: 0.3px;
+}
+
+/* Feature List*/
+
+.feature-list {
+  margin-top: 45px;
+}
+
+.feature-item {
+  display: flex;
+
+  align-items: center;
+
+  margin-bottom: 18px;
+}
+
+.feature-item i {
+  width: 44px;
+
+  height: 44px;
+
+  border-radius: 50%;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  background: rgba(255, 255, 255, 0.15);
+
+  border: 1px solid rgba(255, 255, 255, 0.15);
+
+  backdrop-filter: blur(10px);
+}
+
+.feature-item span {
+  font-size: 15px;
+  font-weight: 500;
+  margin-left: 10px;
+  color: white;
+}
+
+/* Right Panel */
+
+.right-panel {
+  padding: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  background: linear-gradient(
+    rgba(255, 255, 255, 0.85),
+    rgba(255, 255, 255, 0.75)
+  );
+
+  backdrop-filter: blur(12px);
+}
+
+.right-panel h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--primary-dark);
+}
+
+.subtitle {
+  color: var(--muted);
+  margin-bottom: 35px;
+}
+
+/* FORM */
+
+.form-label {
+  font-weight: 500;
+  color: #374151;
+}
+
+.form-control {
+  background: rgba(255, 255, 255, 0.65);
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  border-radius: 14px;
+  padding: 14px 18px;
+  transition: 0.35s;
+}
+
+.form-control:focus {
+  background: white;
+  border-color: #4ade80;
+  box-shadow: 0 0 0 4px rgba(74, 222, 128, 0.12);
+}
+
+/* Login Button */
+
+.btn-login {
+  width: 100%;
+  background: linear-gradient(135deg, #1b5e4b, #2d7a5c);
+  border: none;
+  border-radius: 15px;
+  color: white;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  padding: 15px;
+  transition: 0.35s;
+}
+
+.btn-login:hover {
+  color: rgb(228, 217, 217);
+  background: linear-gradient(135deg, #184d3f, #245d4b);
+  transform: translateY(-3px);
+  box-shadow: 0 18px 35px rgba(34, 197, 94, 0.18);
+}
+
+.btn-trekker {
+  color: #24301e;
+  border: 1px solid #24301e;
+}
+
+.btn-trekker:hover {
+  background: #97aa78;
+  transform: translateY(-2px);
+}
+
+.btn-staff {
+  color: #4d4638;
+
+  border: 1px solid #4d4638;
+}
+
+.btn-staff-success{
+  border-radius: 16px;
+
+    background: linear-gradient(
+        135deg,
+        #014965, #3c89bc, #045f55);
+
+  color: white;
+  height: 48px;
+}
+
+.btn-staff:hover {
+  background: #ccc7bc;
+
+  color: #322d23;
+
+  transform: translateY(-2px);
+}
+
+/* Secondary Buttons */
+
+.btn-register {
+  border-radius: 14px;
+  padding: 13px;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+.btn-register:hover {
+  transform: translateY(-2px);
+}
+
+/* Divider*/
+
+.divider {
+  display: flex;
+
+  align-items: center;
+
+  margin: 28px 0;
+
+  color: var(--muted);
+
+  font-size: 14px;
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+
+  flex: 1;
+
+  height: 1px;
+
+  background: #e5e7eb;
+}
+
+.divider::before {
+  margin-right: 15px;
+}
+
+.divider::after {
+  margin-left: 15px;
+}
+
+.custom-alert {
+
+    position: fixed;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    background: rgba(0, 0, 0, 0.45);
+
+    backdrop-filter: blur(6px);
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    z-index: 9999;
+}
+
+.custom-alert-content {
+
+    width: 380px;
+
+    background: #ffffff;
+
+    border-radius: 18px;
+
+    padding: 30px;
+
+    text-align: center;
+
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+
+    animation: popup 0.25s ease;
+}
+
+.custom-alert-icon {
+
+    font-size: 48px;
+
+    color: #dc3545;
+
+    margin-bottom: 12px;
+}
+
+.custom-alert-content h4 {
+
+    margin-bottom: 12px;
+
+    font-weight: 700;
+}
+
+.custom-alert-content p {
+
+    color: #555;
+
+    margin-bottom: 20px;
+}
+
+.btn-alert {
+
+    background: #198754;
+
+    color: white;
+
+    border-radius: 10px;
+
+    padding: 8px 25px;
+}
+
+.btn-alert:hover {
+
+    background: #157347;
+
+    color: white;
+}
+
+@keyframes popup {
+
+    from {
+
+        transform: scale(0.8);
+
+        opacity: 0;
+    }
+
+    to {
+
+        transform: scale(1);
+
+        opacity: 1;
+    }
+}
+
+/* ==========================
+   FLOATING ALERTS
+========================== */
+
+.toast-container-custom {
+
+    position: fixed;
+
+    top: 25px;
+
+    right: 25px;
+
+    z-index: 99999;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 14px;
+
+    width: 340px;
+}
+
+.flash-toast {
+
+    position: relative;
+
+    overflow: hidden;
+
+    padding: 16px 18px;
+
+    border-radius: 16px;
+
+    backdrop-filter: blur(16px);
+
+    background: rgba(255, 255, 255, 0.96);
+
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.18);
+
+    animation: slideIn 0.35s ease;
+}
+
+.flash-content {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 14px;
+
+    font-size: 14px;
+
+    font-weight: 600;
+}
+
+.flash-close {
+
+    border: none;
+
+    background: transparent;
+
+    font-size: 22px;
+
+    cursor: pointer;
+
+    padding: 0;
+
+    line-height: 1;
+}
+
+/* SUCCESS */
+
+.flash-success {
+
+    border-left: 5px solid #22c55e;
+
+    color: #15803d;
+}
+
+/* DANGER */
+
+.flash-danger {
+
+    border-left: 5px solid #ef4444;
+
+    color: #dc2626;
+}
+
+/* WARNING */
+
+.flash-warning {
+
+    border-left: 5px solid #f59e0b;
+
+    color: #d97706;
+}
+
+/* INFO */
+
+.flash-info {
+
+    border-left: 5px solid #3b82f6;
+
+    color: #2563eb;
+}
+
+.flash-progress {
+
+    position: absolute;
+
+    left: 0;
+
+    bottom: 0;
+
+    height: 4px;
+
+    width: 100%;
+
+    background: rgba(0, 0, 0, 0.1);
+
+    animation: shrink 6s linear forwards;
+}
+
+@keyframes shrink {
+
+    from {
+
+        width: 100%;
+    }
+
+    to {
+
+        width: 0;
+    }
+}
+
+@keyframes slideIn {
+
+    from {
+
+        opacity: 0;
+
+        transform: translateX(60px);
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideOut {
+
+    from {
+
+        opacity: 1;
+
+        transform: translateX(0);
+    }
+
+    to {
+
+        opacity: 0;
+
+        transform: translateX(60px);
+    }
+}
+
+.flash-toast.hide {
+
+    animation: slideOut 0.3s forwards;
+}
+
+/* Flash Messages */
+
+.confirm-buttons {
+
+    display: flex;
+
+    justify-content: center;
+
+    gap: 15px;
+
+    margin-top: 20px;
+}
+
+.confirm-icon {
+
+    color: #f39c12;
+}
+
+#confirmBtn {
+
+    min-width: 110px;
+}
+
+.alert {
+  border: none;
+
+  border-radius: 12px;
+
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* Footer Text*/
+
+.small-text {
+  text-align: center;
+
+  margin-top: 25px;
+
+  color: var(--muted);
+
+  font-size: 14px;
+}
+
+/*  RESPONSIVE DESIGN  */
+
+/* Tablets */
+
+@media (max-width: 1025px) {
+
+  .row.justify-content-center.align-items-center {
+    padding: 20px 12px;
+  }
+
+  .auth-card {
+    width: 95%;
+    margin-top: 20px;
+    border-radius: 24px;
+    margin-left: 20px;
+  }
+
+  .left-panel {
+    display: none;
+  }
+
+  .right-panel {
+    padding: 45px 40px;
+    width: 100%;
+  }
+
+  .right-panel h2 {
+    font-size: 1.9rem;
+  }
+
+  .subtitle {
+    margin-bottom: 28px;
+  }
+
+  .form-control {
+    padding: 14px 16px;
+    font-size: 15px;
+  }
+
+  .btn-login,
+  .btn-register {
+    padding: 14px;
+  }
+
+  .toast-container-custom {
+    width: 300px;
+    right: 16px;
+    top: 16px;
+  }
+
+  .toast-container-custom {
+
+        top: 12px;
+
+        right: 12px;
+
+        left: auto;
+
+        width: 260px;
+
+        z-index: 999999;
+    }
+
+    .flash-toast {
+
+        padding: 10px 12px;
+
+        border-radius: 12px;
+    }
+
+    .flash-content {
+
+        font-size: 12px;
+
+        gap: 8px;
+    }
+
+    .flash-close {
+
+        font-size: 18px;
+    }
+
+    .flash-progress {
+
+        height: 3px;
+    }
+}
+
+
+/* Mobiles */
+
+@media (max-width: 576px) {
+
+  body {
+    padding: 12px;
+  }
+
+  .row.justify-content-center.align-items-center {
+    min-height: auto !important;
+    padding: 0;
+  }
+
+  .col-lg-10 {
+    padding: 0;
+  }
+
+  .auth-card {
+
+    margin-top: 60px;
+    width: 90%;
+    margin-left: 20px;
+
+    border-radius: 18px;
+
+    overflow: hidden;
+  }
+
+  .right-panel {
+
+    padding: 28px 20px;
+  }
+
+  .right-panel h2 {
+
+    font-size: 1.55rem;
+
+    text-align: center;
+  }
+
+  .subtitle {
+
+    text-align: center;
+
+    font-size: 14px;
+
+    margin-bottom: 24px;
+  }
+
+  .form-label {
+
+    font-size: 14px;
+  }
+
+  .form-control {
+
+    padding: 12px 14px;
+
+    font-size: 14px;
+  }
+
+  .btn-login,
+  .btn-register {
+
+    padding: 12px;
+
+    font-size: 14px;
+  }
+
+  .divider {
+
+    margin: 22px 0;
+  }
+
+  .small-text {
+
+    font-size: 13px;
+
+    margin-top: 20px;
+  }
+
+  .toast-container-custom {
+
+    width: calc(100% - 24px);
+
+    right: 12px;
+
+    top: 12px;
+  }
+
+  .custom-alert-content {
+
+    width: calc(100% - 32px);
+
+    padding: 22px;
+  }
+
+  .toast-container-custom {
+
+        width: 220px;
+
+        top: 10px;
+
+        right: 10px;
+    }
+
+    .flash-content {
+
+        font-size: 11px;
+    }
+
+    .flash-toast {
+
+        padding: 8px 10px;
+    }
+}

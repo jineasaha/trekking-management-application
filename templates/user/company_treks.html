@@ -1,0 +1,219 @@
+{% extends "user/user_base.html" %} {% block page_title %}  Explore Our Other Expeditions
+{% endblock %} {%
+block user_content %}
+
+<div class="trek-section-header">
+  <div class="section-icon">
+    <i class="bi bi-compass-fill"></i>
+  </div>
+
+  <div>
+    <h2>All Ongoing Treks</h2>
+
+    <p>Explore the adventures currently in progress.</p>
+  </div>
+</div>
+
+<div class="row g-4 mb-5">
+  {% if ongoing_treks %} {% for trek in ongoing_treks %}
+
+  <div class="expedition-card user-card">
+    <div class="expedition-header">
+      <div>
+        <h3 class="trek-title">{{ trek.trek_name }}</h3>
+
+        <p class="trek-desc">{{ trek.description }}</p>
+      </div>
+
+      <span class="status-pill ongoing">
+        <i class="bi bi-compass-fill"></i>
+        Ongoing
+      </span>
+    </div>
+
+    <div class="info-grid">
+      <div class="info-tile">
+        <i class="bi bi-geo-alt-fill"></i>
+
+        <div>
+          <small>Location</small>
+
+          <strong>{{ trek.location }}</strong>
+        </div>
+      </div>
+
+      <div class="info-tile">
+        <i class="bi bi-bar-chart-fill"></i>
+
+        <div>
+          <small>Difficulty</small>
+
+          <strong>{{ trek.difficulty }}</strong>
+        </div>
+      </div>
+
+      <div class="info-tile">
+        <i class="bi bi-calendar-event-fill"></i>
+
+        <div>
+          <small>Start Date</small>
+
+          <strong>{{ trek.start_date }}</strong>
+        </div>
+      </div>
+
+      <div class="info-tile">
+        <i class="bi bi-calendar-check-fill"></i>
+
+        <div>
+          <small>End Date</small>
+
+          <strong>{{ trek.end_date }}</strong>
+        </div>
+      </div>
+
+      <div class="info-tile">
+        <i class="bi bi-clock-fill"></i>
+
+        <div>
+          <small>Duration</small>
+
+          <strong>{{ trek.duration }} Days</strong>
+        </div>
+      </div>
+
+      <div class="info-tile">
+        <i class="bi bi-people-fill"></i>
+
+        <div>
+          <small>Participants</small>
+
+          <strong>{{ participant_counts[trek.trek_id] }}</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% endfor %} {% else %}
+
+  <div class="user-card empty-user-card">
+    <div class="empty-state">
+      <i class="bi bi-compass"></i>
+
+      <h4>No Ongoing Treks</h4>
+
+      <p>There are no ongoing expeditions at the moment.</p>
+    </div>
+  </div>
+
+  {% endif %}
+</div>
+
+<div class="trek-section-header">
+  <div class="section-icon completed-icon">
+    <i class="bi bi-flag-fill"></i>
+  </div>
+
+  <div>
+    <h2>Completed Treks</h2>
+
+    <p>Discover treks successfully completed.</p>
+  </div>
+</div>
+
+<div class="row g-4">
+  {% if completed_treks %} {% for trek in completed_treks %}
+
+  <div class="expedition-card user-card">
+    <div class="expedition-header">
+      <div>
+        <h3 class="trek-title">{{ trek.trek_name }}</h3>
+
+        <p class="trek-desc">{{ trek.description }}</p>
+      </div>
+
+      <span class="status-pill completed">
+        <i class="bi bi-compass-fill"></i>
+        Completed
+      </span>
+    </div>
+
+    <div class="info-grid">
+      <div class="info-tile">
+        <i class="bi bi-geo-alt-fill"></i>
+
+        <div>
+          <small>Location</small>
+
+          <strong>{{ trek.location }}</strong>
+        </div>
+      </div>
+
+      <div class="info-tile">
+        <i class="bi bi-bar-chart-fill"></i>
+
+        <div>
+          <small>Difficulty</small>
+
+          <strong>{{ trek.difficulty }}</strong>
+        </div>
+      </div>
+
+      <div class="info-tile">
+        <i class="bi bi-calendar-event-fill"></i>
+
+        <div>
+          <small>Start Date</small>
+
+          <strong>{{ trek.start_date }}</strong>
+        </div>
+      </div>
+
+      <div class="info-tile">
+        <i class="bi bi-calendar-check-fill"></i>
+
+        <div>
+          <small>End Date</small>
+
+          <strong>{{ trek.end_date }}</strong>
+        </div>
+      </div>
+
+      <div class="info-tile">
+        <i class="bi bi-clock-fill"></i>
+
+        <div>
+          <small>Duration</small>
+
+          <strong>{{ trek.duration }} Days</strong>
+        </div>
+      </div>
+
+      <div class="info-tile">
+        <i class="bi bi-people-fill"></i>
+
+        <div>
+          <small>Participants</small>
+
+          <strong>{{ participant_counts[trek.trek_id] }}</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% endfor %} {% else %}
+
+  <div class="user-card empty-user-card">
+    <div class="empty-state">
+      <i class="bi bi-flag-fill"></i>
+
+      <h4>No Completed Treks</h4>
+
+      <p>There are no completed expeditions yet.</p>
+    </div>
+  </div>
+
+  {% endif %}
+</div>
+
+{% endblock %}

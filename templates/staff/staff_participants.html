@@ -1,0 +1,353 @@
+{% extends "staff/staff_base.html" %} {% block page_title %} Participants {%
+endblock %} {% block page_description %} Manage participants for this trek. {%
+endblock %} {% block page_action %}
+
+<a
+
+href="
+
+{% if source == 'ongoing' %}
+
+{{ url_for('main.staff_ongoing_treks') }}
+
+{% elif source == 'completed' %}
+
+{{ url_for('main.staff_completed_treks') }}
+
+{% else %}
+
+{{ url_for('main.staff_treks') }}
+
+{% endif %}
+
+"
+
+class="btn btn-outline-staff">
+
+    <i class="bi bi-arrow-left-circle me-2"></i>
+
+    Back to Treks
+
+</a>
+
+{% endblock %} {% block staff_content %}
+
+<div class="staff-card mb-4">
+  <div class="staff-card-header">
+    <h3>
+      <i class="bi bi-map me-2"></i>
+
+      {{ trek.trek_name }}
+    </h3>
+  </div>
+
+  <div class="row mt-3">
+    <div class="col-md-3">
+      <strong>Location</strong>
+
+      <p>{{ trek.location }}</p>
+    </div>
+
+    <div class="col-md-3">
+      <strong>Difficulty</strong>
+
+      <p>{{ trek.difficulty }}</p>
+    </div>
+
+    <div class="col-md-3">
+      <strong>Duration</strong>
+
+      <p>{{ trek.duration }} Days</p>
+    </div>
+
+    <div class="col-md-3">
+      <strong>Status</strong>
+
+      <p>{{ trek.status }}</p>
+    </div>
+  </div>
+</div>
+
+<div class="staff-card">
+  <div class="staff-card-header">
+    <h3>
+      <i class="bi bi-people-fill me-2"></i>
+
+      Participant List
+    </h3>
+  </div>
+
+  {% if bookings %}
+
+  <div class="table-responsive-custom">
+    <table class="staff-table align-middle">
+      <thead>
+        <tr>
+          <th>Name</th>
+
+          <th>Email</th>
+
+          <th>Phone</th>
+
+          {% if source != "ongoing" and source != "completed" %}
+
+<th style="width: 18%">Payment Status</th>
+
+{% endif %}
+
+          <th>Confirmed</th>
+
+          <th>Details</th>
+
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for booking in bookings %}
+
+        <tr>
+          <td>{{ booking.user.name }}</td>
+
+          <td>{{ booking.user.email }}</td>
+
+          <td>{{ booking.user.phone }}</td>
+
+          {% if source != "ongoing" and source != "completed" %}
+          <td>
+            <form
+              method="POST"
+              action="{{ url_for(
+          'main.update_payment_status',
+          booking_id=booking.booking_id) }}"
+            >
+              <select
+                name="payment_status"
+                class="form-select"
+                onchange="this.form.submit()"
+              >
+                <option
+                  value="Pending"
+                  {%
+                  if
+                  booking.payment_status=="Pending"
+                  %}
+                  selected
+                  {%
+                  endif
+                  %}
+                >
+                  Pending
+                </option>
+
+                <option
+                  value="Completed"
+                  {%
+                  if
+                  booking.payment_status=="Completed"
+                  %}
+                  selected
+                  {%
+                  endif
+                  %}
+                >
+                  Paid
+                </option>
+              </select>
+            </form>
+          </td>
+          {% endif %}
+
+          <td>
+            {% if booking.participant_confirmed %}
+
+            <span class="badge bg-success"> Confirmed </span>
+
+            {% else %}
+
+            <span class="badge bg-secondary"> Waiting </span>
+
+            {% endif %}
+          </td>
+
+          <td>
+
+            <button
+                type="button"
+                class="btn btn-outline-staff btn-sm px-3"
+                data-bs-toggle="modal"
+                data-bs-target="#detailsModal{{ booking.booking_id }}">
+
+                <i class="bi bi-person-vcard me-1"></i>
+
+                View Details
+
+            </button>
+
+        </td>
+
+        </tr>
+
+        {% endfor %}
+      </tbody>
+    </table>
+
+  </div>
+
+  
+
+  {% else %}
+
+  <div class="text-center py-5">
+    <i class="bi bi-people display-3 text-muted"></i>
+
+    <h4 class="mt-3">No Participants Yet</h4>
+
+    <p class="text-muted">No bookings have been made for this trek.</p>
+  </div>
+
+  {% endif %}
+</div>
+
+ {% for booking in bookings %}
+
+<div
+    class="modal fade"
+    id="detailsModal{{ booking.booking_id }}"
+    tabindex="-1"
+    aria-hidden="true">
+
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+
+        <div class="modal-content participant-modal">
+
+            <div class="modal-header border-0">
+
+                <h4>
+
+                    <i class="bi bi-person-lines-fill me-2"></i>
+
+                    Participant Details
+
+                </h4>
+
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal">
+
+                </button>
+
+            </div>
+
+            <div class="modal-body">
+
+    <div class="row g-3">
+
+        <div class="col-md-6">
+
+            <label class="form-label">Username</label>
+
+            <input
+                type="text"
+                class="form-control"
+                value="{{ booking.user.name }}"
+                readonly>
+
+        </div>
+
+        <div class="col-md-6">
+
+            <label class="form-label">Full Name</label>
+
+            <input
+                type="text"
+                class="form-control"
+                value="{{ booking.full_name }}"
+                readonly>
+
+        </div>
+
+        <div class="col-md-4">
+
+            <label class="form-label">Age</label>
+
+            <input
+                type="text"
+                class="form-control"
+                value="{{ booking.age }}"
+                readonly>
+
+        </div>
+
+        <div class="col-md-4">
+
+            <label class="form-label">Gender</label>
+
+            <input
+                type="text"
+                class="form-control"
+                value="{{ booking.gender }}"
+                readonly>
+
+        </div>
+
+        <div class="col-md-4">
+
+            <label class="form-label">Payment Status</label>
+
+            <input
+                type="text"
+                class="form-control"
+                value="{{ booking.payment_status }}"
+                readonly>
+
+        </div>
+
+        <div class="col-12">
+
+            <label class="form-label">Medical Issues</label>
+
+            <textarea
+                class="form-control"
+                rows="2"
+                readonly>{{ booking.medical_issues }}</textarea>
+
+        </div>
+
+        <div class="col-md-6">
+
+            <label class="form-label">Contact Email</label>
+
+            <input
+                type="text"
+                class="form-control"
+                value="{{ booking.contact_email }}"
+                readonly>
+
+        </div>
+
+        <div class="col-md-6">
+
+            <label class="form-label">Contact Phone</label>
+
+            <input
+                type="text"
+                class="form-control"
+                value="{{ booking.contact_phone }}"
+                readonly>
+
+        </div>
+
+    </div>
+
+</div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endfor %}
+
+{% endblock %}

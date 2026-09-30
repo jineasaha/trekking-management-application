@@ -1,0 +1,119 @@
+{% extends "base.html" %} {% block content %}
+
+<div class="user-wrapper">
+  <button class="mobile-menu-btn" id="mobileMenuBtn">
+    <i class="bi bi-list"></i>
+  </button>
+  <aside class="user-sidebar" id="sidebar">
+    <button class="close-sidebar-btn" id="closeSidebarBtn">
+      <i class="bi bi-arrow-left"></i>
+    </button>
+    <div class="user-brand">
+      <img
+        src="{{ url_for('static', filename='images/logo.png') }}"
+        class="logo"
+      />
+
+      <h3>PeakTrail</h3>
+    </div>
+
+    <div class="user-profile">
+      <div class="profile-icon">
+        <i class="bi bi-person-badge-fill"></i>
+      </div>
+
+      <div>
+        <strong>{{ session["name"] }}</strong>
+
+        <small>Trekker</small>
+      </div>
+    </div>
+
+    <a
+      href="{{ url_for('main.user_dashboard') }}"
+      class="{% if request.endpoint == 'main.user_dashboard' %}active{% endif %}"
+    >
+      <i class="bi bi-grid"></i>
+      Dashboard
+    </a>
+
+    <a
+      href="{{ url_for('main.available_treks') }}"
+      class="{% if request.endpoint == 'main.available_treks' %}active{% endif %}"
+    >
+      <i class="bi bi-compass"></i>
+      Available Treks
+    </a>
+
+    <a
+      href="{{ url_for('main.my_bookings') }}"
+      class="{% if request.endpoint == 'main.my_bookings' %}active{% endif %}"
+    >
+      <i class="bi bi-journal-check"></i>
+      My Bookings
+    </a>
+
+    <a
+      href="{{ url_for('main.user_history') }}"
+      class="{% if request.endpoint == 'main.user_history' %}active{% endif %}"
+    >
+      <i class="bi bi-clock-history"></i>
+      Trek History
+    </a>
+
+    <a
+      href="{{ url_for('main.company_treks') }}"
+      class="{% if request.endpoint == 'main.company_treks' %}active{% endif %}"
+    >
+      <i class="bi bi-geo-alt"></i>
+      View Expeditions
+    </a>
+
+    <a
+      href="{{ url_for('main.user_profile') }}"
+      class="{% if request.endpoint == 'main.user_profile' %}active{% endif %}"
+    >
+      <i class="bi bi-person-circle"></i>
+      Profile
+    </a>
+
+    <a href="{{ url_for('main.logout') }}" class="logout-btn">
+      <i class="bi bi-box-arrow-right"></i>
+      Logout
+    </a>
+  </aside>
+
+  <main class="user-main">
+    <div class="page-header">
+      <h2>{% block page_title %}{% endblock %}</h2>
+
+      <p>{% block page_description %}{% endblock %}</p>
+    </div>
+
+    <div class="user-main">{% block user_content %} {% endblock %}</div>
+  </main>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const menuBtn = document.getElementById("mobileMenuBtn");
+
+    const closeBtn = document.getElementById("closeSidebarBtn");
+
+    const sidebar = document.getElementById("sidebar");
+
+    menuBtn.addEventListener("click", function () {
+      sidebar.classList.add("show-sidebar");
+
+      menuBtn.style.display = "none";
+    });
+
+    closeBtn.addEventListener("click", function () {
+      sidebar.classList.remove("show-sidebar");
+
+      menuBtn.style.display = "flex";
+    });
+  });
+</script>
+
+{% endblock %}

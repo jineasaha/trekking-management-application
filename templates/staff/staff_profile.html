@@ -1,0 +1,233 @@
+{% extends "staff/staff_base.html" %} {% block page_title %} My Profile {%
+endblock %} {% block page_description %} Manage your personal information and
+account settings. {% endblock %} {% block page_action %}
+
+
+{% endblock %} {% block staff_content %}
+
+<div class="staff-card">
+  <div class="staff-card-header">
+    <h3>
+      <i class="bi bi-person-circle me-2"></i>
+
+      Personal Information
+    </h3>
+  </div>
+
+  <form method="POST" action="{{ url_for('main.staff_profile') }}">
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label class="form-label"> Full Name </label>
+
+        <input
+          type="text"
+          name="name"
+          class="form-control"
+          value="{{ current_user.name }}"
+          required
+        />
+      </div>
+
+      <div class="col-md-6 mb-3">
+        <label class="form-label"> Email Address </label>
+
+        <input
+          type="email"
+          class="form-control"
+          value="{{ current_user.email }}"
+          readonly
+        />
+      </div>
+
+      <div class="col-md-6 mb-3">
+        <label class="form-label"> Phone Number </label>
+
+        <input
+          type="text"
+          name="phone"
+          class="form-control"
+          value="{{ current_user.phone or '' }}"
+        />
+      </div>
+
+      <div class="col-md-6 mb-3">
+        <label class="form-label"> Experience (Years) </label>
+
+        <input
+          type="number"
+          min="0"
+          name="experience"
+          class="form-control"
+          value="{{ current_user.staff_profile.experience or '' }}"
+        />
+      </div>
+
+      <div class="col-md-6 mb-3">
+        <label class="form-label"> Emergency Contact </label>
+
+        <input
+          type="text"
+          name="emergency_contact"
+          class="form-control"
+          value="{{ current_user.staff_profile.emergency_contact or '' }}"
+        />
+      </div>
+
+      <div class="col-md-6 mb-3">
+        <label class="form-label"> Address </label>
+
+        <textarea name="address" rows="3" class="form-control">
+{{ current_user.staff_profile.address or '' }}</textarea
+        >
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-staff2 mt-3">
+      <i class="bi bi-save me-2"></i>
+
+      Save Changes
+    </button>
+  </form>
+</div>
+
+<div class="staff-card mt-4">
+  <div class="staff-card-header">
+    <h3>
+      <i class="bi bi-shield-check me-2"></i>
+
+      Account Information
+    </h3>
+  </div>
+
+  <div class="row">
+    <div class="col-md-4 mb-3">
+      <label class="form-label"> Role </label>
+
+      <input
+        type="text"
+        class="form-control"
+        value="{{ current_user.role }}"
+        readonly
+      />
+    </div>
+
+    <div class="col-md-4 mb-3">
+      <label class="form-label"> Account Status </label>
+
+      <input
+        type="text"
+        class="form-control"
+        value="{% if current_user.is_blacklisted %}
+                    Blacklisted
+                {% elif current_user.is_approved %}
+                    Approved
+                {% else %}
+                    Pending Approval
+                {% endif %}"
+        readonly
+      />
+    </div>
+
+    <div class="col-md-4 mb-3">
+      <label class="form-label"> Staff ID </label>
+
+      <input
+        type="text"
+        class="form-control"
+        value="{{ current_user.user_id }}"
+        readonly
+      />
+    </div>
+  </div>
+</div>
+
+<div class="staff-card mt-4">
+  <div class="staff-card-header">
+    <h3>
+      <i class="bi bi-bar-chart-fill me-2"></i>
+
+      Trek Statistics
+    </h3>
+  </div>
+
+  <div class="row text-center profile-stats-row">
+    <div class="col-md-3">
+      <h2 class="mb-1">{{ bookings_open }}</h2>
+
+      <p class="text-muted">Assigned Treks</p>
+    </div>
+
+    <div class="col-md-3">
+      <h2 class="mb-1">{{ ongoing_count }}</h2>
+
+      <p class="text-muted">Ongoing Treks</p>
+    </div>
+
+    <div class="col-md-3">
+      <h2 class="mb-1">{{ completed_count }}</h2>
+
+      <p class="text-muted">Completed Treks</p>
+    </div>
+
+    <div class="col-md-3">
+      <h2 class="mb-1">{{ participant_count }}</h2>
+
+      <p class="text-muted">Participants Guided</p>
+    </div>
+  </div>
+</div>
+
+<div class="staff-card mt-4">
+  <div class="staff-card-header">
+    <h3>
+      <i class="bi bi-lock-fill me-2"></i>
+
+      Change Password
+    </h3>
+  </div>
+
+  <form method="POST" action="{{ url_for('main.staff_change_password') }}">
+    <div class="row">
+      <div class="col-md-4 mb-3">
+        <label class="form-label"> Current Password </label>
+
+        <input
+          type="password"
+          name="current_password"
+          class="form-control"
+          required
+        />
+      </div>
+
+      <div class="col-md-4 mb-3">
+        <label class="form-label"> New Password </label>
+
+        <input
+          type="password"
+          name="new_password"
+          class="form-control"
+          required
+        />
+      </div>
+
+      <div class="col-md-4 mb-3">
+        <label class="form-label"> Confirm Password </label>
+
+        <input
+          type="password"
+          name="confirm_password"
+          class="form-control"
+          required
+        />
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-warning">
+      <i class="bi bi-key-fill me-2"></i>
+
+      Change Password
+    </button>
+  </form>
+</div>
+
+{% endblock %}

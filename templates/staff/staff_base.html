@@ -1,0 +1,143 @@
+{% extends "base.html" %} {% block content %}
+
+<div class="staff-layout">
+  <!-- ================= SIDEBAR ================= -->
+  <button class="mobile-menu-btn" id="mobileMenuBtn">
+    <i class="bi bi-list"></i>
+  </button>
+  <aside class="sidebar" id="sidebar">
+    <button class="close-sidebar-btn" id="closeSidebarBtn">
+      <i class="bi bi-arrow-left"></i>
+    </button>
+    <div class="sidebar-top">
+      <div class="logo-circle">
+        <img
+          src="{{ url_for('static', filename='images/logo.png') }}"
+          alt="PeakTrail Logo"
+        />
+      </div>
+
+      <div>
+        <h3>PeakTrail</h3>
+
+        <small>Trek Staff Portal</small>
+      </div>
+    </div>
+
+    <!-- STAFF PROFILE -->
+
+    <div class="staff-profile">
+      <div class="profile-icon">
+        <i class="bi bi-person-badge-fill"></i>
+      </div>
+
+      <div>
+        <strong>{{ session["name"] | upper }}</strong>
+
+        <small>Trek Staff</small>
+      </div>
+    </div>
+
+    <!-- NAVIGATION -->
+
+    <div class="sidebar-section">
+      <a
+        href="{{ url_for('main.staff_dashboard') }}"
+        class="sidebar-link {% if request.endpoint=='main.staff_dashboard' %}active{% endif %}"
+      >
+        <i class="bi bi-grid-fill"></i>
+
+        Dashboard
+      </a>
+
+      <a
+        href="{{ url_for('main.staff_treks') }}"
+        class="sidebar-link {% if request.endpoint in ['main.staff_treks','main.staff_update_trek','main.staff_trek_participants'] %}active{% endif %}"
+      >
+        <i class="bi bi-signpost-split-fill"></i>
+
+        Assigned Treks
+      </a>
+
+      <a
+        href="{{ url_for('main.staff_ongoing_treks') }}"
+        class="sidebar-link {% if request.endpoint in ['main.staff_ongoing_treks', 'main.staff_ongoing_participants'] %}active{% endif %}"
+      >
+        <i class="bi bi-flag-fill"></i>
+        Ongoing Treks
+      </a>
+
+      <a
+        href="{{ url_for('main.staff_completed_treks') }}"
+        class="sidebar-link {% if request.endpoint in ['main.staff_completed_treks', 'main.staff_completed_participants'] %}active{% endif %}"
+      >
+        <i class="bi bi-check2-circle"></i>
+        Completed Treks
+      </a>
+
+      <a
+        href="{{ url_for('main.staff_profile') }}"
+        class="sidebar-link {% if request.endpoint=='main.staff_profile' %}active{% endif %}"
+      >
+        <i class="bi bi-person-lines-fill"></i>
+
+        My Profile
+      </a>
+    </div>
+
+    <!-- LOGOUT -->
+
+    <div class="sidebar-bottom">
+      <a href="{{ url_for('main.logout') }}" class="logout-btn">
+        <i class="bi bi-box-arrow-right"></i>
+
+        Logout
+      </a>
+    </div>
+  </aside>
+
+  <!-- ================= MAIN CONTENT ================= -->
+
+  <section class="staff-main">
+    <div class="staff-topbar">
+      <div>
+        <h2>{% block page_title %} Staff Dashboard {% endblock %}</h2>
+
+        <p>
+          {% block page_description %} Manage your assigned treks and
+          participants. {% endblock %}
+        </p>
+      </div>
+
+      <div>{% block page_action %} {% endblock %}</div>
+    </div>
+
+    <!-- PAGE CONTENT -->
+
+    {% block staff_content %} {% endblock %}
+  </section>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const menuBtn = document.getElementById("mobileMenuBtn");
+
+    const closeBtn = document.getElementById("closeSidebarBtn");
+
+    const sidebar = document.getElementById("sidebar");
+
+    menuBtn.addEventListener("click", function () {
+      sidebar.classList.add("show-sidebar");
+
+      menuBtn.style.display = "none";
+    });
+
+    closeBtn.addEventListener("click", function () {
+      sidebar.classList.remove("show-sidebar");
+
+      menuBtn.style.display = "flex";
+    });
+  });
+</script>
+
+{% endblock %}

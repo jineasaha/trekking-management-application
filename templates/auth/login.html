@@ -1,0 +1,115 @@
+{% extends "base.html" %} {% block content %} 
+
+<div
+  class="row justify-content-center align-items-center"
+  style="min-height: 85vh"
+>
+  <div class="col-lg-10">
+    <div class="card auth-card">
+      <div class="row g-0">
+        <!-- LEFT PANEL -->
+
+        <div class="col-lg-5 left-panel">
+          <div class="brand">
+            <img
+              src="{{ url_for('static', filename='images/logo.png') }}"
+              alt="PeakTrail Logo"
+            />
+
+            <h1>PEAKTRAIL</h1>
+          </div>
+
+          <h3 class="quote">
+            Adventure Begins
+            <br />
+            Where Roads End
+          </h3>
+
+          <div class="feature-list">
+            <div class="feature-item">
+              <i class="bi bi-tree-fill"></i>
+              <span>Discover Beautiful Trek Routes</span>
+            </div>
+
+            <div class="feature-item">
+              <i class="bi bi-map-fill"></i>
+              <span>Easy Trek Booking</span>
+            </div>
+
+            <div class="feature-item">
+              <i class="bi bi-people-fill"></i>
+              <span>Verified Trek Staff</span>
+            </div>
+
+            <div class="feature-item">
+              <i class="bi bi-shield-check"></i>
+              <span>Safe & Secure Platform</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT PANEL -->
+
+        <div class="col-lg-7 right-panel">
+          <h2>Welcome Back</h2>
+
+          <p class="subtitle">Login to continue your trekking journey.</p>
+
+          <form method="POST">
+            <div class="mb-3">
+              <label class="form-label"> Email Address </label>
+
+              <input
+                type="email"
+                name="email"
+                class="form-control"
+                placeholder="Enter your email"
+                required
+              />
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label"> Password </label>
+
+              <input
+                type="password"
+                name="password"
+                class="form-control"
+                placeholder="Enter your password"
+                required
+              />
+            </div>
+
+            <button type="submit" class="btn btn-login">
+              <i class="bi bi-box-arrow-in-right me-2"></i>
+
+              Login
+            </button>
+          </form>
+
+          <div class="divider">OR</div>
+
+          <a
+            href="{{ url_for('main.register', role='User') }}"
+            class="btn btn-register btn-trekker w-100 mb-3"
+          >
+            <i class="bi bi-person-plus-fill me-2"></i>
+
+            Register as Trekker
+          </a>
+
+          <a
+            href="{{ url_for('main.register', role='Staff') }}"
+            class="btn btn-register btn-staff w-100"
+          >
+            <i class="bi bi-person-workspace me-2"></i>
+
+            Register as Trek Staff
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

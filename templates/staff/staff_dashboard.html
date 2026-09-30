@@ -1,0 +1,230 @@
+{% extends "staff/staff_base.html" %} {% block page_title %} Dashboard {%
+endblock %} {% block page_description %} Welcome back, {{ session["name"] }}.
+Here's an overview of your trekking activities. {% endblock %} {% block
+staff_content %}
+
+<div class="staff-stat-grid">
+  <div class="staff-stat-card">
+    <div class="staff-stat-icon assigned">
+      <i class="bi bi-signpost-split-fill"></i>
+    </div>
+
+    <div class="staff-stat-info">
+      <h3>{{ bookings_open }}</h3>
+
+      <p>Assigned Treks</p>
+    </div>
+  </div>
+
+  <div class="staff-stat-card">
+    <div class="staff-stat-icon open">
+      <i class="bi bi-flag-fill"></i>
+    </div>
+
+    <div class="staff-stat-info">
+      <h3>{{ active_treks }}</h3>
+
+      <p>Active Treks</p>
+    </div>
+  </div>
+
+  <div class="staff-stat-card">
+    <div class="staff-stat-icon participants">
+      <i class="bi bi-people-fill"></i>
+    </div>
+
+    <div class="staff-stat-info">
+      <h3>{{ total_participants }}</h3>
+
+      <p>Total Participants</p>
+    </div>
+  </div>
+
+  <div class="staff-stat-card">
+    <div class="staff-stat-icon completed">
+      <i class="bi bi-check2-circle"></i>
+    </div>
+
+    <div class="staff-stat-info">
+      <h3>{{ completed_treks }}</h3>
+
+      <p>Completed Treks</p>
+    </div>
+  </div>
+</div>
+
+<div class="staff-card">
+  <div class="staff-card-header">
+    <h4>
+      <i class="bi bi-calendar-event me-2"></i>
+
+      Upcoming Assigned Treks
+    </h4>
+
+    <a href="{{ url_for('main.staff_treks') }}"> View All </a>
+  </div>
+
+  {% set has_upcoming = namespace(value=False) %} {% for trek in assigned_treks
+  %} {% if trek.status == "Bookings Open" %} {% set has_upcoming.value = True %}
+
+  <div class="trek-card">
+    <div class="d-flex justify-content-between align-items-start">
+      <div>
+        <div class="trek-title">{{ trek.trek_name }}</div>
+
+        <div class="trek-location">
+          <i class="bi bi-geo-alt-fill"></i>
+
+          {{ trek.location }}
+        </div>
+      </div>
+
+      <span class="badge status-open"> {{ trek.status }} </span>
+    </div>
+
+    <div class="trek-info">
+      <div class="info-box">
+        <small>Difficulty</small>
+
+        <strong>{{ trek.difficulty }}</strong>
+      </div>
+
+      <div class="info-box">
+        <small>Duration</small>
+
+        <strong>{{ trek.duration }} Days</strong>
+      </div>
+
+      <div class="info-box">
+        <small>Available Slots</small>
+
+        <strong>{{ trek.available_slots }}</strong>
+      </div>
+
+      <div class="info-box">
+        <small>Participants</small>
+
+        <strong>{{ trek.bookings|length }}</strong>
+      </div>
+    </div>
+
+    <div class="staff-team">
+      <h6>Assigned Staff</h6>
+
+      {% for member in trek.assigned_staff %}
+
+      <span
+        class="staff-chip {% if member.staff_id==session['user_id'] %}you{% endif %}"
+      >
+        <i class="bi bi-person-fill"></i>
+
+        {{ member.user.name }} {% if member.staff_id==session['user_id'] %}
+        (You) {% endif %}
+      </span>
+
+      {% endfor %}
+    </div>
+  </div>
+
+  {% endif %} {% endfor %} {% if not has_upcoming.value %}
+
+  <div class="empty-state">
+    <i class="bi bi-calendar2-x"></i>
+
+    <h4>No Upcoming Treks</h4>
+
+    <p>You don't have any upcoming assigned treks at the moment.</p>
+  </div>
+
+  {% endif %}
+</div>
+
+<!-- CURRENT ONGOING TREK -->
+
+<div class="staff-card">
+  <div class="staff-card-header">
+    <h4>
+      <i class="bi bi-compass-fill me-2"></i>
+
+      Current Ongoing Treks
+    </h4>
+    <a href="{{ url_for('main.staff_ongoing_treks') }}"> View All </a>
+  </div>
+
+  {% set ongoing = namespace(found=False) %} {% for trek in assigned_treks %} {%
+  if trek.status=="Trek Ongoing" %} {% set ongoing.found=True %}
+
+  <div class="trek-card">
+    <div class="d-flex justify-content-between align-items-start">
+      <div>
+        <div class="trek-title">{{ trek.trek_name }}</div>
+
+        <div class="trek-location">
+          <i class="bi bi-geo-alt-fill"></i>
+
+          {{ trek.location }}
+        </div>
+      </div>
+
+      <span class="badge status-ongoing"> {{ trek.status }} </span>
+    </div>
+
+    <div class="trek-info">
+      <div class="info-box">
+        <small>Difficulty</small>
+
+        <strong> {{ trek.difficulty }} </strong>
+      </div>
+
+      <div class="info-box">
+        <small>Duration</small>
+
+        <strong> {{ trek.duration }} Days </strong>
+      </div>
+
+      <div class="info-box">
+        <small>Participants</small>
+
+        <strong> {{ trek.bookings|length }} </strong>
+      </div>
+
+      <div class="info-box">
+        <small>Available Slots</small>
+
+        <strong> {{ trek.available_slots }} </strong>
+      </div>
+    </div>
+
+    <div class="staff-team">
+      <h6>Assigned Staff</h6>
+
+      {% for member in trek.assigned_staff %}
+
+      <span
+        class="staff-chip {% if member.staff_id==session['user_id'] %}you{% endif %}"
+      >
+        <i class="bi bi-person-fill"></i>
+
+        {{ member.user.name }} {% if member.staff_id==session['user_id'] %}
+        (You) {% endif %}
+      </span>
+
+      {% endfor %}
+    </div>
+
+  </div>
+
+  {% endif %} {% endfor %} {% if not ongoing.found %}
+
+  <div class="empty-state">
+    <i class="bi bi-compass"></i>
+
+    <h4>No Ongoing Trek</h4>
+
+    <p>None of your assigned treks are currently in progress.</p>
+  </div>
+
+  {% endif %}
+</div>
+
+{% endblock %}
